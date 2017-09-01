@@ -13,3 +13,6 @@ body {
     height: 100%;
     position: relative;
 }
+ul{
+    list-style: none;
+}

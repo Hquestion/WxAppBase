@@ -24,17 +24,28 @@
                     direction: 'vertical',
                     slidesPerView: 'auto',
                     mousewheelControl: true,
-                    freeMode: true
+                    freeMode: true,
+                    freeModeMomentumRatio : 0.5,
+                    resistanceRatio: 0,
+                    freeModeMomentumBounce: false,
+                    onTouchMove: this.broadcastTouchMove
                 }
             }
         },
         mounted(){
             let swiper = this.$refs.mainSwiper.swiper;
             Vue.$mainSwiper = Vue.prototype.$mainSwiper = swiper;
-            console.log(this);
         },
-        beforeResolve(){
-            console.log(arguments);
+        methods: {
+            broadcastTouchMove: (function(){
+                let timer = null;
+                return function(swiper, e){
+                    clearTimeout(timer);
+                    timer = setTimeout(()=>{
+                        window.EventBus.$emit('main-swiper-move', swiper, e);
+                    }, 200);
+                }
+            })()
         }
     }
 </script>
@@ -51,6 +62,7 @@
         position: absolute;
         top: 0;
         left:0;
+        background: #fafafa;
     }
     .content {
         min-height: 100vh;
